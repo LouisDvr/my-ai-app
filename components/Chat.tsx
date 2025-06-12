@@ -2,6 +2,7 @@ import { generateAPIUrl } from '@/utils/generateApiUrl';
 import { useChat } from '@ai-sdk/react';
 import { fetch as expoFetch } from 'expo/fetch';
 import { ScrollView, Text, TextInput, View } from 'react-native';
+import Markdown from 'react-native-markdown-display';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
@@ -12,6 +13,7 @@ export const Chat = ({ threadId }: Props) => {
   const { bottom } = useSafeAreaInsets();
 
   const { messages, error, handleInputChange, input, handleSubmit } = useChat({
+    id: threadId,
     fetch: expoFetch as unknown as typeof globalThis.fetch,
     api: generateAPIUrl('/api/chat'),
     onError: (error) => console.error(error, 'ERROR'),
@@ -34,7 +36,7 @@ export const Chat = ({ threadId }: Props) => {
           <View key={m.id} style={{ marginVertical: 8 }}>
             <View>
               <Text style={{ fontWeight: 700 }}>{m.role}</Text>
-              <Text>{m.content}</Text>
+              <Markdown>{m.content}</Markdown>
             </View>
           </View>
         ))}

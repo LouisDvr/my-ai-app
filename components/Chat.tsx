@@ -47,6 +47,13 @@ export const Chat = ({ threadId }: Props) => {
             <View>
               <Text style={{ fontWeight: 700 }}>{m.role}</Text>
               <Markdown>{m.content}</Markdown>
+              {m.parts
+                .filter((part) => part.type === 'tool-invocation')
+                .map((part) => (
+                  <Text key={part.toolInvocation.toolCallId}>
+                    {JSON.stringify(part.toolInvocation, null, 2)}
+                  </Text>
+                ))}
             </View>
           </View>
         ))}

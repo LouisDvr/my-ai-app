@@ -1,3 +1,4 @@
+import { useThreadHistory } from '@/context/ThreadHistoryContext';
 import { generateAPIUrl } from '@/utils/generateApiUrl';
 import { useChat } from '@ai-sdk/react';
 import { fetch as expoFetch } from 'expo/fetch';
@@ -6,16 +7,25 @@ import Markdown from 'react-native-markdown-display';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
-  threadId?: string;
+  threadId: string;
 };
 
 export const Chat = ({ threadId }: Props) => {
   const { bottom } = useSafeAreaInsets();
+  const { getThread, addThread } = useThreadHistory();
 
   const { messages, error, handleInputChange, input, handleSubmit } = useChat({
     id: threadId,
     fetch: expoFetch as unknown as typeof globalThis.fetch,
     api: generateAPIUrl('/api/chat'),
+    onFinish: (message) => {
+      if (!getThread(threadId)) {
+        addThread({
+          id: threadId,
+          title: message.content,
+        });
+      }
+    },
     onError: (error) => console.error(error, 'ERROR'),
   });
 

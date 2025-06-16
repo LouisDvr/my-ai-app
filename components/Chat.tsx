@@ -2,7 +2,7 @@ import { useThreadHistory } from '@/context/ThreadHistoryContext';
 import { generateAPIUrl } from '@/utils/generateApiUrl';
 import { useChat } from '@ai-sdk/react';
 import { fetch as expoFetch } from 'expo/fetch';
-import { FlatList, Text, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatMessage } from './ChatMessage';
@@ -33,25 +33,17 @@ export const Chat = ({ threadId }: Props) => {
   if (error) return <Text>{error.message}</Text>;
 
   return (
-    <View
-      style={{
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'column',
-        paddingHorizontal: 8,
-        paddingBottom: bottom + 60,
-      }}
-    >
+    <View style={[styles.container, { paddingBottom: bottom + 60 }]}>
       <FlatList
-        style={{ flex: 1 }}
+        style={styles.list}
         data={messages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ChatMessage message={item} />}
       />
 
-      <View style={{ marginTop: 8 }}>
+      <View style={styles.footer}>
         <TextInput
-          style={{ backgroundColor: 'white', padding: 12 }}
+          style={styles.input}
           placeholder="Say something..."
           value={input}
           onChange={(e) =>
@@ -73,3 +65,22 @@ export const Chat = ({ threadId }: Props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 8,
+  },
+  list: {
+    flex: 1,
+  },
+  footer: {
+    marginTop: 8,
+  },
+  input: {
+    backgroundColor: 'white',
+    padding: 12,
+  },
+});

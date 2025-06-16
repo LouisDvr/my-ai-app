@@ -1,5 +1,5 @@
 import { UIMessage } from 'ai';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
 type Props = {
@@ -7,9 +7,9 @@ type Props = {
 };
 
 export const ChatMessage = ({ message }: Props) => (
-  <View style={{ marginVertical: 8 }}>
+  <View style={styles.container}>
     <View>
-      <Text style={{ fontWeight: 700 }}>{message.role}</Text>
+      <Text style={styles.text}>{message.role}</Text>
       <Markdown>{message.content}</Markdown>
       {message.parts
         .filter((part) => part.type === 'tool-invocation')
@@ -21,3 +21,12 @@ export const ChatMessage = ({ message }: Props) => (
     </View>
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 8,
+  },
+  text: {
+    fontWeight: '700',
+  },
+});

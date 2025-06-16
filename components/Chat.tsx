@@ -2,7 +2,7 @@ import { useThreadHistory } from '@/context/ThreadHistoryContext';
 import { generateAPIUrl } from '@/utils/generateApiUrl';
 import { useChat } from '@ai-sdk/react';
 import { fetch as expoFetch } from 'expo/fetch';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { FlatList, Text, TextInput, View } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatMessage } from './ChatMessage';
@@ -42,11 +42,12 @@ export const Chat = ({ threadId }: Props) => {
         paddingBottom: bottom + 60,
       }}
     >
-      <ScrollView style={{ flex: 1 }}>
-        {messages.map((m) => (
-          <ChatMessage message={m} key={m.id} />
-        ))}
-      </ScrollView>
+      <FlatList
+        style={{ flex: 1 }}
+        data={messages}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ChatMessage message={item} />}
+      />
 
       <View style={{ marginTop: 8 }}>
         <TextInput

@@ -1,0 +1,25 @@
+name: quality-check
+on: [push, workflow_dispatch]
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm run lint
+
+      - name: Run tests
+        run: pnpm run test
